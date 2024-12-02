@@ -1,19 +1,15 @@
 package ru.glazunov.numberDetect.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Data
 public class UploadImageResponse {
-
-    private Integer responseCode;
-    private String responseMessage;
-    private String imageResponseBase64;
-    private String fileTypeResponseBase64;
-    private String fileNameResponseBase64;
-
+    @JsonProperty("image_base64")
+    private String imageBase64;
 }

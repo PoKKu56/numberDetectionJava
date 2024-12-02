@@ -23,6 +23,19 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <!-- Для работы с JSON -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jakson.version}</version> <!-- Используйте последнюю стабильную версию -->
+        </dependency>
+
+        <!-- Для работы с HTTP запросами (если используете Java 11 и выше) -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpcomponents.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -37,6 +50,7 @@
             <artifactId>spring-core</artifactId>
             <version>${srping_core.version}</version>
         </dependency>
+
     </dependencies>
 
 </project>

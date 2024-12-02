@@ -1,13 +1,18 @@
 package ru.glazunov.numberDetect.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.glazunov.numberDetect.dto.UploadImageRequest;
-import ru.glazunov.numberDetect.dto.UploadImageResponse;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-@RequestMapping("/number-detect")
+import java.io.IOException;
+
+@RequestMapping("/numberDetect")
 public interface DetectionController {
 
-    @PostMapping("/upload")
-    UploadImageResponse uploadImage(UploadImageRequest uploadImageRequest);
+    @PostMapping("/main")
+    ResponseEntity<byte[]> uploadImage(@RequestParam("file") MultipartFile file,
+                                       @RequestParam(value = "url", required = false) String url, Model model) throws IOException, InterruptedException;
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUMDETECT</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <img src="/images/main_icon.png" alt="Main Icon">
+        <nav>
+            <a href="main">NUMDETECT</a>
+            <a href="results">Результаты</a>
+            <a href="help">Помощь</a>
+            <a href="devs">Разработчики</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Распознавание цифр на картинке</h1>
+        <div class="container">
+            <form id="uploadForm" enctype="multipart/form-data" th:action="@{/numberDetect/main}" method="POST">
+                <!-- Загрузка файла -->
+                <div class="upload-local-box" id="uploadBox">
+                    <p>Загрузите вашу фотографию</p>
+                    <img src="/images/load_file_system.png" alt="Загрузить из системы">
+                    <input type="file" id="fileInput" name="file" accept="image/*">
+                </div>
+
+                <div class="upload-url-box">
+                    <p>Введите ссылку:</p>
+                    <div class="divider"></div>
+                    <input type="url" name="url" placeholder="URL...">
+                </div>
+
+                <button type="submit" class="upload-button">
+                    <img src="/images/upload_icon.png" alt="Загрузить по ссылке">
+                </button>
+            </form>
+        </div>
+
+
+       <!-- <script>
+            const form = document.getElementById("uploadForm");
+
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch('/numberDetect/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+                    alert(result.message); // Предполагаем, что сервер вернёт сообщение о статусе
+
+                } catch (error) {
+                    console.error("Error uploading file:", error);
+                }
+            });
+        </script>-->
+
+        <div class="example">
+            <h2>Пример:</h2>
+            <div class="main-images">
+                <img src="/images/example1.jpg" alt="Пример до">
+                <img src="/images/processing.png" alt="Обработка сервером">
+                <img src="/images/example2.jpg" alt="Пример после распозвания">
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

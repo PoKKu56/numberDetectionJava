@@ -35,5 +35,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<srping_core.version>6.1.14</srping_core.version>
+		<jakson.version>2.15.0</jakson.version>
+		<httpcomponents.version>4.5.13</httpcomponents.version>
 	</properties>
 </project>
