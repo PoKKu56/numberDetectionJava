@@ -1,31 +1,26 @@
 package ru.glazunov.numberDetectionJava.service;
 
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.verification.VerificationMode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.testng.annotations.BeforeMethod;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 import org.testng.annotations.Test;
-import ru.glazunov.numberDetect.dto.UploadImageResponse;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
 import org.mockito.InjectMocks;
+import ru.glazunov.numberDetectionJava.exception.NoFileException;
 
-import static javax.management.Query.eq;
-import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
-
-
+@RequiredArgsConstructor
+@SpringBootTest
 public class UploadImageServiceTest {
 
     @InjectMocks
-    private final UploadImageService uploadImageService = new UploadImageService();
+    private UploadImageService uploadImageService;
 
 
     @Test
@@ -40,6 +35,30 @@ public class UploadImageServiceTest {
         // Проверка
         assertNotNull(base64Image);
         assertFalse(base64Image.isEmpty(), "Base64 string should not be empty");
+    }
+
+
+
+    @Test
+    public void testUploadImage_noFileAndNoUrl_shouldThrowNoFileException() {
+
+        // Мокаем MultipartFile
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.isEmpty()).thenReturn(true); // Говорим, что файл пустой
+
+        // Пустой URL
+        String url = "";
+
+        // Мокаем модель
+        Model model = mock(Model.class);
+
+        // Создаем экземпляр реального сервиса
+        UploadImageService uploadImageService = new UploadImageService();
+
+        // Проверяем, что выбрасывается исключение NoFileException
+        assertThrows(NoFileException.class, () -> {
+            uploadImageService.uploadImage(file, url, model);  // Вызываем метод
+        });
     }
 
 }
