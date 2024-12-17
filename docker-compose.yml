@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PYTHON_API_URL=http://python-app:8081/process-image
+    ports:
+      - "8080:8080"
+    depends_on:
+      - python-app
+    networks:
+      - app_network
+
+  python-app:
+    build:
+      context: D:\\numberDetection
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

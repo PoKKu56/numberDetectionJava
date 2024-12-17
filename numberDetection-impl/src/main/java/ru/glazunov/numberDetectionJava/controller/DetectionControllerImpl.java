@@ -1,5 +1,6 @@
 package ru.glazunov.numberDetectionJava.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 public class DetectionControllerImpl implements DetectionController {
 
     private final UploadImageService uploadImageService;
+    private final HttpServletRequest request;
 
     @Override
     public ResponseEntity<byte[]> uploadImage(MultipartFile file, String url, Model model) throws IOException, InterruptedException {

@@ -8,10 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import ru.glazunov.numberDetect.dto.UploadImageRequest;
 import ru.glazunov.numberDetect.dto.UploadImageResponse;
+import ru.glazunov.numberDetectionJava.exception.NoFileException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -21,20 +25,66 @@ import java.util.Base64;
 @Service
 public class UploadImageService {
 
-    private static final String URL = "http://127.0.0.1:8081/process-image";
+    private static final String URL = System.getenv("PYTHON_API_URL");
     private final HttpClient client = HttpClient.newHttpClient();
 
     public void uploadImage(MultipartFile file, String url, Model model) throws IOException, InterruptedException {
 
+        String base64Image = "";
 
-        String base64Image = imageToByte64(file);
+        if (file.isEmpty() && url.isEmpty()) {
+            throw new NoFileException("Строка url пуста или Фото не выбрано");
+        }
+
+        if (!file.isEmpty()){
+
+            base64Image = imageToByte64(file);
+
+            finalStage(base64Image);
+
+        }
+
+        if (!url.isEmpty()) {
+
+            base64Image = convertImageToBase64(url);
+
+            finalStage(base64Image);
+
+        }
+
+    }
+
+    private void finalStage(String base64Image) throws IOException, InterruptedException {
 
         UploadImageResponse uploadImageResponse = uploadImageResponse(base64Image);
 
-        System.out.println(uploadImageResponse.getImageBase64());
-
         saveBase64ImageToFile(uploadImageResponse.getImageBase64(), "output.png");
+    }
 
+    public static String convertImageToBase64(String imageUrl) throws IOException {
+        // Создаем URL объект
+        URL url = new URL(imageUrl);
+
+        // Открываем поток для чтения изображения
+        InputStream inputStream = url.openStream();
+
+        // Прочитаем данные из потока в байты
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, bytesRead);
+        }
+
+        // Закрываем потоки
+        inputStream.close();
+        byteArrayOutputStream.close();
+
+        // Получаем байтовый массив изображения
+        byte[] imageBytes = byteArrayOutputStream.toByteArray();
+
+        // Преобразуем байтовый массив в строку Base64
+        return Base64.getEncoder().encodeToString(imageBytes);
     }
 
     public String imageToByte64(MultipartFile file) throws IOException {
@@ -65,8 +115,11 @@ public class UploadImageService {
                 .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
 
+        System.out.println(request);
+
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+        System.out.println(response);
 
         // Проверяем статус ответа
         if (response.statusCode() == 200) {
