@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.glazunov.numberDetect.dto.UploadImageRequest;
 import ru.glazunov.numberDetect.dto.UploadImageResponse;
 import ru.glazunov.numberDetectionJava.exception.NoFileException;
+import ru.glazunov.numberDetectionJava.exception.TooMuchFiles;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -32,6 +33,11 @@ public class UploadImageService {
 
         String base64Image = "";
 
+        if (!file.isEmpty() && !url.isEmpty()) {
+            throw new TooMuchFiles("Можно использовать только локальную загрузку или url. Одновременное их использование" +
+                    "запрещено");
+        }
+
         if (file.isEmpty() && url.isEmpty()) {
             throw new NoFileException("Строка url пуста или Фото не выбрано");
         }
@@ -51,7 +57,6 @@ public class UploadImageService {
             finalStage(base64Image);
 
         }
-
     }
 
     private void finalStage(String base64Image) throws IOException, InterruptedException {
@@ -125,7 +130,6 @@ public class UploadImageService {
         if (response.statusCode() == 200) {
             // Обрабатываем JSON-ответ
             imageResponse = objectMapper.readValue(response.body(), UploadImageResponse.class);
-            System.out.println("Response Image Base64: " + imageResponse.getImageBase64());
         } else {
             System.out.println("Error: " + response.statusCode());
         }

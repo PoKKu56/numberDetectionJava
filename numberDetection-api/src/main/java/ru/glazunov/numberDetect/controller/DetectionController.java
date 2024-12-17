@@ -14,7 +14,8 @@ import java.io.IOException;
 public interface DetectionController {
 
     @PostMapping("/main")
-    ResponseEntity<byte[]> uploadImage(@RequestParam("file") MultipartFile file,
-                                       @RequestParam(value = "url", required = false) String url, Model model) throws IOException, InterruptedException;
+    ResponseEntity<byte[]> uploadImage(@RequestParam(value = "file", required = false) MultipartFile file,
+                                       @RequestParam(value = "url", required = false) String url, Model model)
+                                        throws IOException, InterruptedException;
 
 }

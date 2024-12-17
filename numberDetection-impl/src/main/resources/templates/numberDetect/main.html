@@ -31,8 +31,8 @@
                 <div class="upload-url-box">
                     <p>Введите ссылку:</p>
                     <div class="divider"></div>
-                    <input type="url" name="url" placeholder="URL...">
-                    <button type="submit" class="upload-button">
+                    <input id="url" type="url" name="url" placeholder="URL...">
+                    <button id="submit" type="submit" class="upload-button" onclick="submitForm()">
                         <img src="/images/upload_icon.png" alt="Загрузить по ссылке">
                     </button>
                 </div>
@@ -42,28 +42,14 @@
         </div>
 
 
-       <!-- <script>
-            const form = document.getElementById("uploadForm");
-
-            form.addEventListener("submit", async (event) => {
-                event.preventDefault();
-
-                const formData = new FormData(form);
-
-                try {
-                    const response = await fetch('/numberDetect/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const result = await response.json();
-                    alert(result.message); // Предполагаем, что сервер вернёт сообщение о статусе
-
-                } catch (error) {
-                    console.error("Error uploading file:", error);
-                }
-            });
-        </script>-->
+       <script>
+           function submitForm() {
+               var frm = document.getElementById('uploadForm');
+               frm.submit();
+               frm.reset();
+               return false;
+           }
+       </script>
 
         <div class="example">
             <h2>Пример:</h2>
